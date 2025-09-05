@@ -1,0 +1,3 @@
+[submodule "third_party/ByteReader"]
+	path = third_party/ByteReader
+	url = https://github.com/ggcrunchy/ByteReader
