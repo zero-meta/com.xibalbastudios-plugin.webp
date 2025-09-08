@@ -8,7 +8,10 @@ project_root=${current_dir}/../..
 webp_root=${project_root}/third_party/libwebp
 INSTALL_DIR=${webp_root}/build/tvos/install
 
-TVOS_MIN_VERSION="12.0"
+CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
+echo "CPU_CORES: ${CPU_CORES}"
+
+TVOS_MIN_VERSION="11.0"
 
 clean_prev_build_results() {
     cd ${webp_root}
@@ -59,7 +62,8 @@ build_libwebp() {
         -DWEBP_BUILD_LIBWEBPMUX=OFF \
         -DWEBP_BUILD_WEBPMUX=OFF \
         -DWEBP_BUILD_EXTRAS=OFF
-    make -j8
+
+    make -j${CPU_CORES}
 }
 
 if [ "$1" == "clean" ]
@@ -73,12 +77,14 @@ build_libwebp "SIMULATOR64" "simulator-x86_64"
 
 cd ${webp_root}
 lipo -create build/tvos/OS64/libwebp.a build/tvos/SIMULATOR64/libwebp.a -output build/tvos/libwebp.a
+lipo -create build/tvos/OS64/libsharpyuv.a build/tvos/SIMULATOR64/libsharpyuv.a -output build/tvos/libsharpyuv.a
 
 if [ ! -d ${current_dir}/third_party_libs ]
 then
     mkdir -p ${current_dir}/third_party_libs
 fi
 cp build/tvos/libwebp.a ${current_dir}/third_party_libs/libwebp.a
+cp build/tvos/libsharpyuv.a ${current_dir}/third_party_libs/libsharpyuv.a
 
 # XCFRAMEWORK_PATH="${project_root}/libs/tvos/libwebp.xcframework"
 # if [ -d ${XCFRAMEWORK_PATH} ]

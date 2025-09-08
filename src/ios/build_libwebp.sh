@@ -7,7 +7,10 @@ current_dir=$(pwd)
 project_root=${current_dir}/../..
 webp_root=${project_root}/third_party/libwebp
 
-IOS_MIN_VERSION="12.0"
+CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
+echo "CPU_CORES: ${CPU_CORES}"
+
+IOS_MIN_VERSION="11.0"
 
 clean_prev_build_results() {
     cd ${webp_root}
@@ -41,7 +44,7 @@ build_libwebp() {
         -DWEBP_BUILD_LIBWEBPMUX=OFF \
         -DWEBP_BUILD_WEBPMUX=OFF \
         -DWEBP_BUILD_EXTRAS=OFF
-    make -j8
+    make -j${CPU_CORES}
 }
 
 if [ "$1" == "clean" ]
@@ -55,6 +58,7 @@ build_libwebp "SIMULATOR64"
 
 cd ${webp_root}
 lipo -create build/ios/OS64/libwebp.a build/ios/SIMULATOR64/libwebp.a -output build/ios/libwebp.a
+lipo -create build/ios/OS64/libsharpyuv.a build/ios/SIMULATOR64/libsharpyuv.a -output build/ios/libsharpyuv.a
 
 libs_dir=${current_dir}/third_party_libs
 if [ ! -d ${libs_dir} ]
@@ -62,3 +66,4 @@ then
     mkdir -p ${libs_dir}
 fi
 cp build/ios/libwebp.a ${libs_dir}/libwebp.a
+cp build/ios/libsharpyuv.a ${libs_dir}/libsharpyuv.a

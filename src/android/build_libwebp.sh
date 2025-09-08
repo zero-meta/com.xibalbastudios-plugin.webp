@@ -10,6 +10,9 @@ ANDROID_NDK_DIR=$ANDROID_NDK_HOME/21.0.6113669
 project_root=${current_dir}/../..
 webp_root=${project_root}/third_party/libwebp
 
+CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
+echo "CPU_CORES: ${CPU_CORES}"
+
 clean_prev_build_results() {
     cd ${webp_root}
     if [ -d ./build/android ]
@@ -41,7 +44,7 @@ build_libwebp() {
         -DANDROID_ABI=${1} \
         -DCMAKE_BUILD_TYPE=Release \
         -DANDROID_NATIVE_API_LEVEL=16
-    make -j8
+    make -j${CPU_CORES}
 
     libs_dir=${current_dir}/third_party_libs
     if [ ! -d ${libs_dir}/${1} ]

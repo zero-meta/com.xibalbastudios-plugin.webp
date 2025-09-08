@@ -7,6 +7,9 @@ current_dir=$(pwd)
 project_root=${current_dir}/../..
 webp_root=${project_root}/third_party/libwebp
 
+CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
+echo "CPU_CORES: ${CPU_CORES}"
+
 clean_prev_build_results() {
     cd ${webp_root}
     if [ -d ./build/mac ]
@@ -35,7 +38,7 @@ build_libwebp() {
         -DWEBP_BUILD_WEBPMUX=OFF \
         -DWEBP_BUILD_EXTRAS=OFF \
         -DCMAKE_OSX_ARCHITECTURES=${1}
-    make -j8
+    make -j${CPU_CORES}
 }
 
 if [ "$1" == "clean" ]

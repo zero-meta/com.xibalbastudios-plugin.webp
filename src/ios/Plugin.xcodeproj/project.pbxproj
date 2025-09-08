@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		416DC7DE2E6EBF29006E911D /* plugin.webp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416DC7DC2E6EBF29006E911D /* plugin.webp.cpp */; };
 		416DC7FF2E6EDF5D006E911D /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 416DC7FE2E6EDF5D006E911D /* libwebp.a */; };
+		416DC8032E6EE7B6006E911D /* libsharpyuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 416DC8022E6EE7B6006E911D /* libsharpyuv.a */; };
 		CE8A2C661E107B2000FCFAFD /* ByteReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE8A2C641E107B2000FCFAFD /* ByteReader.cpp */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 /* Begin PBXFileReference section */
 		416DC7DC2E6EBF29006E911D /* plugin.webp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = plugin.webp.cpp; sourceTree = "<group>"; };
 		416DC7FE2E6EDF5D006E911D /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebp.a; path = third_party_libs/libwebp.a; sourceTree = "<group>"; };
+		416DC8022E6EE7B6006E911D /* libsharpyuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsharpyuv.a; path = third_party_libs/libsharpyuv.a; sourceTree = "<group>"; };
 		A4E253B6166D6FB300DCDC2C /* libwebp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libwebp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8A2C641E107B2000FCFAFD /* ByteReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteReader.cpp; path = ../../third_party/ByteReader/ByteReader.cpp; sourceTree = "<group>"; };
 		CE8A2C651E107B2000FCFAFD /* ByteReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ByteReader.h; path = ../../third_party/ByteReader/ByteReader.h; sourceTree = "<group>"; };
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				416DC8032E6EE7B6006E911D /* libsharpyuv.a in Frameworks */,
 				416DC7FF2E6EDF5D006E911D /* libwebp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -91,6 +94,7 @@
 		F5F02C8D25E0336F00F763D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				416DC8022E6EE7B6006E911D /* libsharpyuv.a */,
 				416DC7FE2E6EDF5D006E911D /* libwebp.a */,
 			);
 			name = Frameworks;
@@ -269,7 +273,10 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GENERATE_MASTER_OBJECT_FILE = YES;
-				LIBRARY_SEARCH_PATHS = "${SRCROOT}/third_party_libs";
+				LIBRARY_SEARCH_PATHS = (
+					"${SRCROOT}/third_party_libs",
+					"$(PROJECT_DIR)/third_party_libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -292,7 +299,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GENERATE_MASTER_OBJECT_FILE = YES;
 				"HEADER_SEARCH_PATHS[arch=*]" = "";
-				LIBRARY_SEARCH_PATHS = "${SRCROOT}/third_party_libs";
+				LIBRARY_SEARCH_PATHS = (
+					"${SRCROOT}/third_party_libs",
+					"$(PROJECT_DIR)/third_party_libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

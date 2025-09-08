@@ -59,5 +59,5 @@ checkError
 
 # echo "$OUTPUT_DIR"/libplugin_$TARGET_NAME.$OUTPUT_SUFFIX
 
-cp "$path"/build/$CONFIG-iphoneos/lib$TARGET_NAME.$OUTPUT_SUFFIX "${path}/../../plugins/2016.2874/iphone/plugin.$TARGET_NAME.$OUTPUT_SUFFIX"
-cp "$path"/build/$CONFIG-iphonesimulator/lib$TARGET_NAME.$OUTPUT_SUFFIX "${path}/../../plugins/2016.2874/iphone-sim/plugin.$TARGET_NAME.$OUTPUT_SUFFIX"
+cp "$path"/build/$CONFIG-iphoneos/lib$TARGET_NAME.$OUTPUT_SUFFIX "${path}/../../plugins/2016.2874/iphone/libplugin_$TARGET_NAME.$OUTPUT_SUFFIX"
+cp "$path"/build/$CONFIG-iphonesimulator/lib$TARGET_NAME.$OUTPUT_SUFFIX "${path}/../../plugins/2016.2874/iphone-sim/libplugin_$TARGET_NAME.$OUTPUT_SUFFIX"
