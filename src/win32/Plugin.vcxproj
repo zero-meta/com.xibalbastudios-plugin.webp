@@ -45,7 +45,6 @@
     <ClCompile Include="..\shared\src\dsp\dec_sse2.c" />
     <ClCompile Include="..\shared\src\dsp\dec_sse41.c" />
     <ClCompile Include="..\shared\src\dsp\enc.c" />
-    <ClCompile Include="..\shared\src\dsp\enc_avx2.c" />
     <ClCompile Include="..\shared\src\dsp\enc_mips32.c" />
     <ClCompile Include="..\shared\src\dsp\enc_mips_dsp_r2.c" />
     <ClCompile Include="..\shared\src\dsp\enc_msa.c" />

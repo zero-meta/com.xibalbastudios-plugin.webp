@@ -2,6 +2,9 @@
 
 path=`dirname $0`
 
+./build_libwebp.sh
+cd $path
+
 OUTPUT_DIR=$1
 TARGET_NAME=webp
 OUTPUT_SUFFIX=a

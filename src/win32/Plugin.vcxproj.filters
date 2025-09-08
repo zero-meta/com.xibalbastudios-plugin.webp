@@ -95,9 +95,6 @@
     <ClCompile Include="..\shared\src\dsp\enc.c">
       <Filter>src\dsp</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\src\dsp\enc_avx2.c">
-      <Filter>src\dsp</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\src\dsp\enc_mips_dsp_r2.c">
       <Filter>src\dsp</Filter>
     </ClCompile>

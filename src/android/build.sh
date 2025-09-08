@@ -6,6 +6,10 @@ set -o errexit
 
 path=`dirname $0`
 
+./build_libwebp.sh
+
+cd $path
+
 TARGET_NAME=webp
 CONFIG=Release
 DEVICE_TYPE=all
@@ -18,7 +22,7 @@ then
 	CMD="cmd //c "
 else
     # ANDROID_NDK="/Applications/android-ndk-r20"
-    ANDROID_NDK=$HOME/Library/Android/sdk/ndk/20.1.5948944
+    ANDROID_NDK=$HOME/Library/Android/sdk/ndk/21.0.6113669
     LIBS_SRC_DIR="$HOME/Library/Application Support/Corona/Native/Corona/android/lib/gradle/Corona.aar"
 	CMD=
 fi
@@ -105,11 +109,12 @@ popd > /dev/null
 echo Done.
 echo $path/jniLibs/armeabi-v7a/libplugin.$TARGET_NAME.so
 
+dst_dir=$path/../../plugins/2016.2874/android
+
 echo Packing binaries...
-tar -czvf data.tgz -C $path jniLibs -C $path/jniLibs/armeabi-v7a libplugin.$TARGET_NAME.so
+tar -czvf data.tgz -C $path jniLibs -C $path/jniLibs/armeabi-v7a libplugin.$TARGET_NAME.so -C ${dst_dir} metadata.lua
 echo $path/data.tgz.
 
-dst_dir=$path/../../plugins/2016.2874/android
 cp $path/jniLibs/armeabi-v7a/libplugin.$TARGET_NAME.so ${dst_dir}/libplugin.$TARGET_NAME.so
 cp $path/jniLibs/arm64-v8a/libplugin.$TARGET_NAME.so ${dst_dir}/jniLibs/arm64-v8a/libplugin.$TARGET_NAME.so
 cp $path/jniLibs/armeabi-v7a/libplugin.$TARGET_NAME.so ${dst_dir}/jniLibs/armeabi-v7a/libplugin.$TARGET_NAME.so

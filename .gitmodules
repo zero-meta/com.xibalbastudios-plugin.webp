@@ -1,3 +1,7 @@
 [submodule "third_party/ByteReader"]
 	path = third_party/ByteReader
 	url = https://github.com/ggcrunchy/ByteReader
+[submodule "third_party/libwebp"]
+	path = third_party/libwebp
+	url = https://github.com/webmproject/libwebp.git
+	branch = 1.6.0

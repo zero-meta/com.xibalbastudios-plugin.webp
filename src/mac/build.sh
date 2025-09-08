@@ -2,6 +2,10 @@
 
 path=`dirname $0`
 
+./build_libwebp.sh
+
+cd ${path}
+
 OUTPUT_DIR=$1
 TARGET_NAME=webp
 OUTPUT_SUFFIX=dylib
@@ -46,9 +50,9 @@ checkError
 
 PLUGINS_DIR="$HOME/Library/Application Support/Corona/Simulator/Plugins/"
 
-# cp "$path/build/$CONFIG/$TARGET_NAME.$OUTPUT_SUFFIX" "$OUTPUT_DIR/plugin_$TARGET_NAME.$OUTPUT_SUFFIX"
+cp "$path/build/$CONFIG/$TARGET_NAME.$OUTPUT_SUFFIX" "$OUTPUT_DIR/plugin_$TARGET_NAME.$OUTPUT_SUFFIX"
 
-# cp "$path/build/$CONFIG/$TARGET_NAME.$OUTPUT_SUFFIX" "${PLUGINS_DIR}/plugin_$TARGET_NAME.$OUTPUT_SUFFIX"
+cp "$path/build/$CONFIG/$TARGET_NAME.$OUTPUT_SUFFIX" "${PLUGINS_DIR}/plugin_$TARGET_NAME.$OUTPUT_SUFFIX"
 
 # mkdir -p "$HOME/Solar2DPlugins/com.xibalbastudios/$TARGET_NAME/macos-sim"
 # tar -czf "$HOME/Solar2DPlugins/com.xibalbastudios/$TARGET_NAME/macos-sim/data.tgz" "./$TARGET_NAME.dylib"
