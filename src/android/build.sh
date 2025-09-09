@@ -6,9 +6,12 @@ set -o errexit
 
 path=`dirname $0`
 
-./build_libwebp.sh
+# ./build_libwebp.sh
 
-cd $path
+# cd $path
+
+CPU_CORES=$(sysctl -n hw.ncpu 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null || echo 2)
+echo "CPU_CORES: ${CPU_CORES}"
 
 TARGET_NAME=webp
 CONFIG=Release
@@ -83,16 +86,16 @@ unzip -u "$LIBS_SRC_DIR" "jni/*/*.so" -d "$LIBS_DST_DIR"
 if [ -z "$CFLAGS" ]
 then
 	echo "----------------------------------------------------------------------------"
-	echo "$ANDROID_NDK/ndk-build $FLAGS V=1 APP_OPTIM=$OPTIM_FLAGS"
+	echo "$ANDROID_NDK/ndk-build $FLAGS V=1 APP_OPTIM=$OPTIM_FLAGS -j${CPU_CORES}"
 	echo "----------------------------------------------------------------------------"
 
-	$CMD $ANDROID_NDK/ndk-build $FLAGS V=1 APP_OPTIM=$OPTIM_FLAGS
+	$CMD $ANDROID_NDK/ndk-build $FLAGS V=1 APP_OPTIM=$OPTIM_FLAGS -j${CPU_CORES}
 else
 	echo "----------------------------------------------------------------------------"
-	echo "$ANDROID_NDK/ndk-build $FLAGS V=1 MY_CFLAGS="$CFLAGS" APP_OPTIM=$OPTIM_FLAGS"
+	echo "$ANDROID_NDK/ndk-build $FLAGS V=1 MY_CFLAGS="$CFLAGS" APP_OPTIM=$OPTIM_FLAGS -j${CPU_CORES}"
 	echo "----------------------------------------------------------------------------"
 
-	$CMD $ANDROID_NDK/ndk-build $FLAGS V=1 MY_CFLAGS="$CFLAGS" APP_OPTIM=$OPTIM_FLAGS
+	$CMD $ANDROID_NDK/ndk-build $FLAGS V=1 MY_CFLAGS="$CFLAGS" APP_OPTIM=$OPTIM_FLAGS -j${CPU_CORES}
 fi
 
 find "$path/libs" \( -name liblua.so -or -name libcorona.so \)  -delete

@@ -216,6 +216,24 @@ CORONA_PUBLIC CORONA_EXPORT int luaopen_plugin_webp (lua_State* L) CORONA_PUBLIC
 
         if (out_stride < def_stride) return luaL_error(L, "Stride too low");
 
+        size_t required_size = 0;
+        if (fixup == 1U) {
+            // RGB输出
+            if (__builtin_mul_overflow(w * h, 3, &required_size)) {
+                return luaL_error(L, "Image too large");
+            }
+        } else {
+            // 使用stride
+            if (__builtin_mul_overflow(out_stride, h, &required_size)) {
+                return luaL_error(L, "Stride too large");
+            }
+        }
+
+        if (output.mCount < required_size) {
+            return luaL_error(L, "Output buffer too small: need %zu, got %zu",
+                              required_size, output.mCount);
+        }
+
         uint8_t * out = const_cast<uint8_t *>(static_cast<const uint8_t *>(output.mBytes));
 
         if (fixup != 3U) // see note above
@@ -224,7 +242,12 @@ CORONA_PUBLIC CORONA_EXPORT int luaopen_plugin_webp (lua_State* L) CORONA_PUBLIC
 
             if (fixup)
             {
-                intermediate.resize(size_t(w * h * ncomps));
+                size_t total_size = 0;
+                if (__builtin_mul_overflow(w, h, &total_size) ||
+                    __builtin_mul_overflow(total_size, ncomps, &total_size)) {
+                    return luaL_error(L, "Image size too large");
+                }
+                intermediate.resize(total_size);
 
                 config.output.u.RGBA.rgba = intermediate.data();
                 config.output.u.RGBA.size = intermediate.size();
@@ -240,9 +263,14 @@ CORONA_PUBLIC CORONA_EXPORT int luaopen_plugin_webp (lua_State* L) CORONA_PUBLIC
 
             bool ok = CheckCode(L, WebPDecode(static_cast<const uint8_t *>(input.mBytes), input.mCount, &config));  // input, output, config[, err]
 
-            WebPFreeDecBuffer(&config.output);
-
-            if (!ok) return lua_error(L);
+            if (ok)
+            {
+                WebPFreeDecBuffer(&config.output);
+            }
+            else
+            {
+                if (!ok) return lua_error(L);
+            }
 
             if (fixup) // see above
             {
@@ -252,19 +280,23 @@ CORONA_PUBLIC CORONA_EXPORT int luaopen_plugin_webp (lua_State* L) CORONA_PUBLIC
 
                 if (4U == fixup)
                 {
-                    if (old != MODE_ARGB && old != MODE_Argb) data += 3;
+                    // if (old != MODE_ARGB && old != MODE_Argb) data += 3;
 
                     if (output.mNumComponents == 1)
                     {
+                        // 根据格式确定RGB位置
+                        int r_offset = (old == MODE_ARGB || old == MODE_Argb) ? 1 : 0;
+                        int g_offset = (old == MODE_ARGB || old == MODE_Argb) ? 2 : 1;
+                        int b_offset = (old == MODE_ARGB || old == MODE_Argb) ? 3 : 2;
+
                         for (int y = 0; y < h; ++y) {
-                            const uint8_t* row = data + y * w * 4;
+                            const uint8_t* row = data + y * w * 4;  // 不修改data指针
                             uint8_t* out_row = out + y * out_stride;
                             for (int x = 0; x < w; ++x) {
-                                // get grayscale color from ARGB
-                                uint8_t r = row[x * 4 + 1];
-                                uint8_t g = row[x * 4 + 2];
-                                uint8_t b = row[x * 4 + 3];
-                                // Standard luminance formula: 0.299*R + 0.587*G + 0.114*B
+                                const uint8_t* pixel = row + x * 4;
+                                uint8_t r = pixel[r_offset];
+                                uint8_t g = pixel[g_offset];
+                                uint8_t b = pixel[b_offset];
                                 out_row[x] = static_cast<uint8_t>((r * 77 + g * 150 + b * 29) >> 8);
                             }
                         }
